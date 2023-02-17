@@ -43,9 +43,8 @@ class ApplicationInsightsHandler extends AbstractProcessingHandler
         if (isset($record['context']['exception'])) {
             $this->client->trackException($record['context']['exception']);
         } else {
-            $this->client->trackMessage(
-                (string) $record['message'],
-                self::InsightToLoggingInterfaceMapping[$record['level']],
+            $this->client->trackEvent(
+                (string) '[' . $record['level'] . '] ' . $record['message'],
                 $record['context'],
             );
         }
