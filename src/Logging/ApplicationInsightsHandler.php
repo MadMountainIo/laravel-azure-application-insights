@@ -20,6 +20,17 @@ class ApplicationInsightsHandler extends AbstractProcessingHandler
         Logger::DEBUG     => Message_Severity_Level::VERBOSE,
     ];
 
+    const InsightToHumanMapping = [
+        Logger::EMERGENCY => 'CRITICAL',
+        Logger::ALERT     => 'CRITICAL',
+        Logger::CRITICAL  => 'CRITICAL',
+        Logger::ERROR     => 'ERROR',
+        Logger::WARNING   => 'WARNING',
+        Logger::NOTICE    => 'INFO',
+        Logger::INFO      => 'INFO',
+        Logger::DEBUG     => 'DEBUG'
+    ];
+
     /**
      * @var ApplicationInsights
      */
@@ -44,7 +55,7 @@ class ApplicationInsightsHandler extends AbstractProcessingHandler
             $this->client->trackException($record['context']['exception']);
         } else {
             $this->client->trackEvent(
-                (string) '[' . $record['level'] . '] ' . $record['message'],
+                (string) '[' . self::InsightToHumanMapping[$record['level']] . '] ' . $record['message'],
                 $record['context'],
             );
         }
